@@ -141,12 +141,12 @@ def main():
                 out_num_ARAE=model.Dec.genarate(Z_fake)
 
                 for k in range(0,2):
-                    out_string=vec_to_char(batch_x2[k])
+                    out_string=vec_to_char(batch_x2[k],char_list)
                     print("Smile_input         :",out_string)
-                    out_string=vec_to_char(out_num_AE[k])
+                    out_string=vec_to_char(out_num_AE[k],char_list)
                     print("Smile_reconstruced  : ",out_string)
                 for k in range(0,10):
-                    out_string=vec_to_char(out_num_ARAE[k])
+                    out_string=vec_to_char(out_num_ARAE[k],char_list)
                     print("ARAE genarate smile : ",out_string)
 
         line_out="%d train loss: AE %6.3f dis %6.3f gen %6.3f" %(epoch,
