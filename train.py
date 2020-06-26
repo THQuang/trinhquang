@@ -9,25 +9,20 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 from model import ARAE as ARAE
-from utils import *
+from utils import char_list, char_dict
+from utils import Loaddataset, Device, accu, vec_to_char, cal_prec_rec
 import time
 
+# Đường dẫn chứa dữ liệu đã quan pre process
+datadir="/content/drive/My Drive/Genarate_smiles/ZINC/"
+
+# Đường dẫn lưu model 
+save_dir="/content/drive/My Drive/ARAE_new/save_ARAE"
+if not os.path.exists(save_dir):
+        os.makedirs(save_dir)
+        
 def main():
-
-    char_list= ["H","C","N","O","F","P","S","Cl","Br","I",
-    "n","c","o","s",
-    "1","2","3","4","5","6","7","8",
-    "(",")","[","]",
-    "-","=","#","/","\\","+","@","X","Y"]
-
-    # Đường dẫn chứa dữ liệu 
-    datadir="/content/drive/My Drive/Genarate_smiles/ZINC/"
-
-    # Đường dẫn lưu dữ liệu
-    save_dir="/content/drive/My Drive/ARAE_new/save_ARAE"
-    if not os.path.exists(save_dir):
-            os.makedirs(save_dir)
-
+    
     Num_feature= len(char_list)
     train_data= Loaddataset(datadir,"train")
     test_data= Loaddataset(datadir,"test")
@@ -40,17 +35,10 @@ def main():
     seed_dim=hidden_dim
     NLSTM_layer=1
     batch_size=100
-
-    conf=0.5 # Hệ số so sánh cal_prec_rec
-
-
+    
     use_cuda= torch.cuda.is_available()
-    if use_cuda==True:
-        device_num=torch.cuda.current_device()
-        device = torch.device("cuda:%d" %device_num)
-    else :
-        device =  torch.device("cpu")
-
+    decive = Device(use_cuda)
+    conf=0.5 # Hệ số so sánh cal_prec_rec
 
     para={'Nseq':Sequen_length, 'Nfea':Num_feature, 'hidden_dim':hidden_dim,
             'seed_dim':seed_dim,'NLSTM_layer':NLSTM_layer,'device':device}
@@ -69,7 +57,6 @@ def main():
     total_st = time.time()
 
     criterion_AE = nn.CrossEntropyLoss()
-
     AE_parameters=list(model.Enc.parameters())+list(model.Dec.parameters())
 
     optimizer_AE = optim.Adam(AE_parameters, lr=0.001)
@@ -95,7 +82,6 @@ def main():
         running_loss_dis=0.0
 
         st=time.time()
-
         std=std0*np.power(std_decay_ratio,epoch) + std00 #cập nhật hệ số std sau mỗi epoch
 
         train_loader=DataLoader(dataset=train_data,batch_size=batch_size,
@@ -229,16 +215,12 @@ def main():
         et=time.time()
         print("time: %10.2f" %(et-st))
         
-        # path=save_dir+"/save_%d.pth" %(epoch+17)
-        # torch.save(model,path)
-
+        path=save_dir+"/save_%d.pth" %(epoch+17)
+        torch.save(model,path)
 
     print('Finished Training')
     total_et = time.time()
     print ("time : %10.2f" %(total_et-total_st))
-
-
-
 
 
 if __name__=="__main__":
