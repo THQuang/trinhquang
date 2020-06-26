@@ -1,4 +1,12 @@
+import torch
+from torch.nn.parameter import Parameter
+import os,sys
+import numpy as np
 
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+from torch.utils.data import Dataset, DataLoader
 char_list= ["H","C","N","O","F","P","S","Cl","Br","I",
 "n","c","o","s",
 "1","2","3","4","5","6","7","8",
@@ -16,9 +24,9 @@ char_dict={'H': 0, 'C': 1, 'N': 2, 'O': 3, 'F': 4, 'P': 5,
 def Device(use_cuda):
     if use_cuda==True:
         device_num=torch.cuda.current_device()
-        return device = torch.device("cuda:%d" %device_num)
+        return torch.device("cuda:%d" %device_num)
     else :
-        return device =  torch.device("cpu")
+        return torch.device("cpu")
 
 class Loaddataset(Dataset):
     def __init__(self,datadir,dname):
