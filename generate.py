@@ -40,7 +40,14 @@ def main():
 
     model=ARAE(para)
     model.to(device)
-
+    
+    std0=0.0
+    std=0.0
+    std_seed=0.25
+    std_decay_ratio=0.99
+    mean0=torch.zeros(batch_size,hidden_dim)
+    mean_seed=torch.zeros(batch_size,seed_dim)
+    
     total_st = time.time()
     epoch_list=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,35,40,45,50]
 
@@ -65,8 +72,10 @@ def main():
                 fin=Ntest
             mm=np.arange(ini,fin)
             b_size=mm.shape[0]
-
-            Z_gen=torch.randn((100,300)).to(device) # Vector random 
+                
+            batch_s=torch.normal(mean=mean_seed,std=std_seed).to(device)
+            Z_gen=model.Gen(batch_s)
+            
             out_num_ARAE=model.Dec.decoding(Z_gen) # Gennerate vector smile 
 
             for k in range(0,b_size):
