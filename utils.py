@@ -13,6 +13,12 @@ char_dict={'H': 0, 'C': 1, 'N': 2, 'O': 3, 'F': 4, 'P': 5,
 '(': 22, ')': 23, '[': 24, ']': 25, '-': 26, '=': 27, '#': 28,
 '/': 29, '\\': 30, '+': 31, '@': 32, '<': 33, '>': 34}
 
+def Device(use_cuda):
+    if use_cuda==True:
+        device_num=torch.cuda.current_device()
+        return device = torch.device("cuda:%d" %device_num)
+    else :
+        return device =  torch.device("cpu")
 
 class Loaddataset(Dataset):
     def __init__(self,datadir,dname):
