@@ -1,4 +1,4 @@
-Create input data: Pre_process_data
-trainning: train.py
-genation: genarate.py
+1. Create input data: Pre_process_data \n
+2. trainning: train.py \n
+3. genation: genarate.py
 
