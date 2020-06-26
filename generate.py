@@ -41,11 +41,8 @@ def main():
     model=ARAE(para)
     model.to(device)
     
-    std0=0.0
-    std=0.0
+    
     std_seed=0.25
-    std_decay_ratio=0.99
-    mean0=torch.zeros(batch_size,hidden_dim)
     mean_seed=torch.zeros(batch_size,seed_dim)
     
     total_st = time.time()
