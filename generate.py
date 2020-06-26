@@ -58,14 +58,6 @@ def main():
         os.makedirs(save_result_dir)
 
     total_st = time.time()
-
-    std0=0.0
-    std=0.0
-    std_seed=0.25
-    std_decay_ratio=0.99
-    mean0=torch.zeros(batch_size,hidden_dim)
-    mean_seed=torch.zeros(batch_size,seed_dim)
-    
     epoch_list=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,35,40,45,50]
 
     for epoch in epoch_list:
